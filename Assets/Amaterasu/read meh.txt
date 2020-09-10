@@ -1,1 +1,0 @@
-Game seems to use palletes to color some textures

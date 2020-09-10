@@ -173,7 +173,7 @@ Material:
     - _Offset_X_Axis_BLD: -0.183
     - _Offset_Y_Axis_BLD: 0.522
     - _Offset_Z: 0.79
-    - _Outline_Width: 1.56
+    - _Outline_Width: 2.44
     - _RimLight: 0
     - _RimLight_FeatherOff: 0
     - _RimLight_InsideMask: 0.32
@@ -216,7 +216,7 @@ Material:
     - _utsVersionZ: 0
     m_Colors:
     - _1st_ShadeColor: {r: 0.5849056, g: 0.5849056, b: 0.5849056, a: 1}
-    - _2nd_ShadeColor: {r: 0.16981131, g: 0.16981131, b: 0.16981131, a: 1}
+    - _2nd_ShadeColor: {r: 0.4056604, g: 0.4056604, b: 0.4056604, a: 1}
     - _AngelRing_Color: {r: 1, g: 1, b: 1, a: 1}
     - _Ap_RimLightColor: {r: 1, g: 1, b: 1, a: 1}
     - _BaseColor: {r: 0.8018868, g: 0.8018868, b: 0.8018868, a: 1}

@@ -4,10 +4,12 @@ using System.Collections;
 using System.Collections.Generic;
 using System.IO;
 using DG.Tweening;
-
 using PDollarGestureRecognizer;
 
 public class Demo : MonoBehaviour {
+	private Vector3 loc;
+	private GameManager gameManager;
+	public LayerMask layerMask;
 
 	public Transform gestureOnScreenPrefab;
 	public Transform spherePrefab;
@@ -34,6 +36,7 @@ public class Demo : MonoBehaviour {
 
 	void Start () {
 
+		gameManager = FindObjectOfType<GameManager>();
 		platform = Application.platform;
 		drawArea = new Rect(0, 0, Screen.width, Screen.height);
 
@@ -49,6 +52,9 @@ public class Demo : MonoBehaviour {
 	}
 
 	void Update () {
+
+		if (!gameManager.isDrawing)
+			return;
 
 		if (platform == RuntimePlatform.Android || platform == RuntimePlatform.IPhonePlayer) {
 			if (Input.touchCount > 0) {
@@ -97,12 +103,45 @@ public class Demo : MonoBehaviour {
 				currentGestureLineRenderer.SetPosition(vertexCount - 1, Camera.main.ScreenToWorldPoint(new Vector3(virtualKeyPosition.x, virtualKeyPosition.y, 10)));
 			}
 		}
+	}
 
-		if (Input.GetKeyDown(KeyCode.Space))
+	public void TryRecognize()
+	{
+		if (points.Count <= 0)
+			return;
+
+		if (recognized)
+			ClearLine();
+
+		recognized = true;
+
+		Gesture candidate = new Gesture(points.ToArray());
+
+		Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
+
+		if (gestureResult.Score < .5f)
 		{
+			ClearLine();
+			return;
+		}
+
+		if (gestureResult.GestureClass == "circle")
+		{
+			Transform b = Instantiate(spherePrefab, gestureLinesRenderer[0].bounds.center, Quaternion.identity); ;
+			b.DOScale(0, .2f).From().SetEase(Ease.OutBack);
+			loc = Vector3.MoveTowards(gestureLinesRenderer[0].bounds.center, Camera.main.transform.position, 5);
+
+			RaycastHit hit = new RaycastHit();
+			if (Physics.SphereCast(loc, 1, Camera.main.transform.forward, out hit, 10, layerMask))
+			{
+				if (hit.collider.CompareTag("Cuttable"))
+				{
+					Destroy(hit.collider.gameObject);
+				}
+			}
+
 			if (recognized)
 			{
-
 				recognized = false;
 				strokeId = -1;
 
@@ -110,73 +149,28 @@ public class Demo : MonoBehaviour {
 
 				foreach (LineRenderer lineRenderer in gestureLinesRenderer)
 				{
-
 					lineRenderer.SetVertexCount(0);
 					Destroy(lineRenderer.gameObject);
 				}
-
 				gestureLinesRenderer.Clear();
 			}
-
-			recognized = true;
-
-			Gesture candidate = new Gesture(points.ToArray());
-
-			Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
-
-			if (gestureResult.GestureClass == "circle")
-			{
-				Transform b = Instantiate(spherePrefab, gestureLinesRenderer[0].bounds.center, Quaternion.identity); ;
-				b.DOScale(0, .2f).From().SetEase(Ease.OutBack);
-
-				if (recognized)
-				{
-
-					recognized = false;
-					strokeId = -1;
-
-					points.Clear();
-
-					foreach (LineRenderer lineRenderer in gestureLinesRenderer)
-					{
-
-						lineRenderer.SetVertexCount(0);
-						Destroy(lineRenderer.gameObject);
-					}
-
-					gestureLinesRenderer.Clear();
-				}
-
-
-			}
-
-			if (gestureResult.GestureClass == "t")
-			{
-				Transform b = Instantiate(tPrefab, gestureLinesRenderer[0].bounds.center, Quaternion.identity); ;
-				b.DOScale(0, .2f).From().SetEase(Ease.OutBack);
-
-				if (recognized)
-				{
-
-					recognized = false;
-					strokeId = -1;
-
-					points.Clear();
-
-					foreach (LineRenderer lineRenderer in gestureLinesRenderer)
-					{
-
-						lineRenderer.SetVertexCount(0);
-						Destroy(lineRenderer.gameObject);
-					}
-
-					gestureLinesRenderer.Clear();
-				}
-
-
-			}
-
 		}
+	}
+
+	public void ClearLine()
+	{
+		recognized = false;
+		strokeId = -1;
+
+		points.Clear();
+
+		foreach (LineRenderer lineRenderer in gestureLinesRenderer)
+		{
+			lineRenderer.positionCount = 0;
+			Destroy(lineRenderer.gameObject);
+		}
+
+		gestureLinesRenderer.Clear();
 	}
 
 	//void OnGUI() {
@@ -191,7 +185,7 @@ public class Demo : MonoBehaviour {
 
 	//		Gesture candidate = new Gesture(points.ToArray());
 	//		Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
-			
+
 	//		message = gestureResult.GestureClass + " " + gestureResult.Score;
 
 	//		if(gestureResult.GestureClass == "circle")
