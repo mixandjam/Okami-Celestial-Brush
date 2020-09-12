@@ -6,6 +6,7 @@ TagManager:
   tags:
   - PlayerEyes
   - Cuttable
+  - Ground
   layers:
   - Default
   - TransparentFX
@@ -18,7 +19,7 @@ TagManager:
   - BrushLine
   - Interactables
   - BrushObject
-  - 
+  - Ground
   - 
   - 
   - 

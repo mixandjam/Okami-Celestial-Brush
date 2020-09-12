@@ -5,6 +5,7 @@ using System.Collections.Generic;
 using System.IO;
 using DG.Tweening;
 using PDollarGestureRecognizer;
+using Cinemachine;
 
 public class Demo : MonoBehaviour {
 	private Vector3 loc;
@@ -119,24 +120,43 @@ public class Demo : MonoBehaviour {
 
 		Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
 
-		if (gestureResult.Score < .5f)
+		if (gestureResult.Score < .6f)
 		{
 			ClearLine();
 			return;
 		}
 
-		if (gestureResult.GestureClass == "circle")
+		if (gestureResult.GestureClass == "cherrybomb")
 		{
 			Transform b = Instantiate(spherePrefab, gestureLinesRenderer[0].bounds.center, Quaternion.identity); ;
 			b.DOScale(0, .2f).From().SetEase(Ease.OutBack);
+
+			if (recognized)
+			{
+				recognized = false;
+				strokeId = -1;
+
+				points.Clear();
+
+				foreach (LineRenderer lineRenderer in gestureLinesRenderer)
+				{
+					lineRenderer.SetVertexCount(0);
+					Destroy(lineRenderer.gameObject);
+				}
+				gestureLinesRenderer.Clear();
+			}
+		}
+		if (gestureResult.GestureClass == "horizontal line")
+		{
 			loc = Vector3.MoveTowards(gestureLinesRenderer[0].bounds.center, Camera.main.transform.position, 5);
 
 			RaycastHit hit = new RaycastHit();
-			if (Physics.SphereCast(loc, 1, Camera.main.transform.forward, out hit, 10, layerMask))
+			if (Physics.SphereCast(loc, 7, Camera.main.transform.forward, out hit, 15, layerMask))
 			{
 				if (hit.collider.CompareTag("Cuttable"))
 				{
-					Destroy(hit.collider.gameObject);
+					hit.collider.GetComponent<TreeScript>().Slash();
+					Camera.main.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
 				}
 			}
 
@@ -156,6 +176,7 @@ public class Demo : MonoBehaviour {
 			}
 		}
 	}
+
 
 	public void ClearLine()
 	{
