@@ -4,6 +4,7 @@ using UnityEngine;
 using DG.Tweening;
 using UnityEngine.Rendering;
 using Cinemachine;
+using UnityEngine.SceneManagement;
 
 public class GameManager : MonoBehaviour
 {
@@ -12,12 +13,10 @@ public class GameManager : MonoBehaviour
     public Camera brushCamera;
 
     public Volume grainVolume;
-    //public Transform drawingPlane;
     public Renderer drawingRenderer;
     public CinemachineFreeLook freeLook;
 
     public bool isDrawing;
-
 
     private void Start()
     {
@@ -36,15 +35,15 @@ public class GameManager : MonoBehaviour
         ClampPosition(brush);
 
         if (Input.GetKeyDown(KeyCode.C))
-        {
             SetDrawingMode(!isDrawing);
-        }
-        if (Input.GetKeyUp(KeyCode.C))
-        {
-            SetDrawingMode(!isDrawing);
-        }
 
-        if(brushAnimator != null)
+        if (Input.GetKeyUp(KeyCode.C))
+            SetDrawingMode(!isDrawing);
+
+        if (Input.GetKeyDown(KeyCode.R))
+            SceneManager.LoadSceneAsync(SceneManager.GetActiveScene().name);
+
+        if(brushAnimator != null && brushAnimator.gameObject.activeSelf)
         {
             brushAnimator.SetFloat("X", Mathf.Lerp(brushAnimator.GetFloat("X"),Input.GetAxis("Mouse X") * 1,.07f));
             brushAnimator.SetFloat("Y", Mathf.Lerp(brushAnimator.GetFloat("Y"),Input.GetAxis("Mouse Y") * 1,.07f));

@@ -8,6 +8,7 @@ using PDollarGestureRecognizer;
 using Cinemachine;
 
 public class Demo : MonoBehaviour {
+
 	private Vector3 loc;
 	private GameManager gameManager;
 	public LayerMask layerMask;
@@ -151,7 +152,7 @@ public class Demo : MonoBehaviour {
 			loc = Vector3.MoveTowards(gestureLinesRenderer[0].bounds.center, Camera.main.transform.position, 5);
 
 			RaycastHit hit = new RaycastHit();
-			if (Physics.SphereCast(loc, 7, Camera.main.transform.forward, out hit, 15, layerMask))
+			if (Physics.SphereCast(loc, 3, Camera.main.transform.forward, out hit, 15, layerMask))
 			{
 				if (hit.collider.CompareTag("Cuttable"))
 				{
