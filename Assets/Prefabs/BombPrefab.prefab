@@ -114,7 +114,7 @@ Rigidbody:
   m_UseGravity: 1
   m_IsKinematic: 0
   m_Interpolate: 0
-  m_Constraints: 112
+  m_Constraints: 0
   m_CollisionDetection: 0
 --- !u!114 &4540354192472073567
 MonoBehaviour:
@@ -146,8 +146,8 @@ MonoBehaviour:
   m_ImpulseDefinition:
     m_ImpulseChannel: 1
     m_RawSignal: {fileID: 11400000, guid: 69ce8388f6785dd4c8c39915efece2f4, type: 2}
-    m_AmplitudeGain: 8
-    m_FrequencyGain: 0.12
+    m_AmplitudeGain: 9
+    m_FrequencyGain: 0.13
     m_RepeatMode: 0
     m_Randomize: 1
     m_TimeEnvelope:
@@ -164,11 +164,11 @@ MonoBehaviour:
         m_PostInfinity: 2
         m_RotationOrder: 4
       m_AttackTime: 0
-      m_SustainTime: 0.3
+      m_SustainTime: 0.4
       m_DecayTime: 1
       m_ScaleWithImpact: 1
       m_HoldForever: 0
-    m_ImpactRadius: 200
+    m_ImpactRadius: 400
     m_DirectionMode: 0
     m_DissipationMode: 2
     m_DissipationDistance: 1000
@@ -475,7 +475,7 @@ ParticleSystem:
     startSize:
       serializedVersion: 2
       minMaxState: 3
-      scalar: 1.2
+      scalar: 1.4
       minScalar: 1
       maxCurve:
         serializedVersion: 2
@@ -937,7 +937,7 @@ ParticleSystem:
     sphericalDirectionAmount: 0
     randomPositionAmount: 0
     radius:
-      value: 0.87
+      value: 0.99
       mode: 0
       spread: 0
       speed:
@@ -1166,7 +1166,7 @@ ParticleSystem:
       countCurve:
         serializedVersion: 2
         minMaxState: 0
-        scalar: 40
+        scalar: 50
         minScalar: 30
         maxCurve:
           serializedVersion: 2

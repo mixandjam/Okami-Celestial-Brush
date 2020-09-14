@@ -6,6 +6,7 @@ using System.IO;
 using DG.Tweening;
 using PDollarGestureRecognizer;
 using Cinemachine;
+using UnityEditor;
 
 public class Demo : MonoBehaviour {
 
@@ -15,7 +16,7 @@ public class Demo : MonoBehaviour {
 
 	public Transform gestureOnScreenPrefab;
 	public Transform spherePrefab;
-	public Transform tPrefab;
+	public Transform jammoPrefab;
 
 	private List<Gesture> trainingSet = new List<Gesture>();
 
@@ -92,6 +93,7 @@ public class Demo : MonoBehaviour {
 				
 				Transform tmpGesture = Instantiate(gestureOnScreenPrefab, transform.position, transform.rotation) as Transform;
 				currentGestureLineRenderer = tmpGesture.GetComponent<LineRenderer>();
+				//Selection.activeGameObject = tmpGesture.gameObject;
 				
 				gestureLinesRenderer.Add(currentGestureLineRenderer);
 				
@@ -112,7 +114,7 @@ public class Demo : MonoBehaviour {
 		if (points.Count <= 0)
 			return;
 
-		if (recognized)
+		if(recognized)
 			ClearLine();
 
 		recognized = true;
@@ -121,11 +123,13 @@ public class Demo : MonoBehaviour {
 
 		Result gestureResult = PointCloudRecognizer.Classify(candidate, trainingSet.ToArray());
 
-		if (gestureResult.Score < .6f)
+		if (gestureResult.Score < .75f)
 		{
 			ClearLine();
 			return;
 		}
+
+		Camera.main.GetComponent<CinemachineImpulseSource>().GenerateImpulse();
 
 		if (gestureResult.GestureClass == "cherrybomb")
 		{
@@ -147,12 +151,34 @@ public class Demo : MonoBehaviour {
 				gestureLinesRenderer.Clear();
 			}
 		}
-		if (gestureResult.GestureClass == "horizontal line")
+
+		//if (gestureResult.GestureClass == "mixandjam")
+		//{
+		//	Transform b = Instantiate(jammoPrefab, gestureLinesRenderer[0].bounds.center, Quaternion.identity); ;
+		//	b.DOScale(0, .2f).From().SetEase(Ease.OutBack);
+
+		//	if (recognized)
+		//	{
+		//		recognized = false;
+		//		strokeId = -1;
+
+		//		points.Clear();
+
+		//		foreach (LineRenderer lineRenderer in gestureLinesRenderer)
+		//		{
+		//			lineRenderer.SetVertexCount(0);
+		//			Destroy(lineRenderer.gameObject);
+		//		}
+		//		gestureLinesRenderer.Clear();
+		//	}
+		//}
+
+		if (gestureResult.GestureClass == "horizontal line" || gestureResult.GestureClass == "line")
 		{
-			loc = Vector3.MoveTowards(gestureLinesRenderer[0].bounds.center, Camera.main.transform.position, 5);
+			//loc = Vector3.MoveTowards(gestureLinesRenderer[0].bounds.center, Camera.main.transform.position, 5);
 
 			RaycastHit hit = new RaycastHit();
-			if (Physics.SphereCast(loc, 3, Camera.main.transform.forward, out hit, 15, layerMask))
+			if (Physics.SphereCast(gestureLinesRenderer[0].bounds.center, 3, Camera.main.transform.forward, out hit, 15, layerMask))
 			{
 				if (hit.collider.CompareTag("Cuttable"))
 				{

@@ -10012,7 +10012,7 @@ CapsuleCollider:
   m_Material: {fileID: 0}
   m_IsTrigger: 0
   m_Enabled: 1
-  m_Radius: 1.8
+  m_Radius: 2
   m_Height: 26.29
   m_Direction: 1
   m_Center: {x: 0, y: 10.8, z: 0}
@@ -10503,7 +10503,7 @@ ParticleSystem:
       serializedVersion: 2
       minMaxState: 3
       scalar: 9
-      minScalar: 2
+      minScalar: 4
       maxCurve:
         serializedVersion: 2
         m_Curve:
@@ -11080,7 +11080,7 @@ ParticleSystem:
     sphericalDirectionAmount: 1
     randomPositionAmount: 0.2
     radius:
-      value: 0.51
+      value: 0.78
       mode: 0
       spread: 0
       speed:

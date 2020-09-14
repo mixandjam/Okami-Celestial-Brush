@@ -45,8 +45,8 @@ public class GameManager : MonoBehaviour
 
         if(brushAnimator != null && brushAnimator.gameObject.activeSelf)
         {
-            brushAnimator.SetFloat("X", Mathf.Lerp(brushAnimator.GetFloat("X"),Input.GetAxis("Mouse X") * 1,.07f));
-            brushAnimator.SetFloat("Y", Mathf.Lerp(brushAnimator.GetFloat("Y"),Input.GetAxis("Mouse Y") * 1,.07f));
+            brushAnimator.SetFloat("X", Mathf.Lerp(brushAnimator.GetFloat("X"), Input.GetAxis("Mouse X") * 1, .07f));
+            brushAnimator.SetFloat("Y", Mathf.Lerp(brushAnimator.GetFloat("Y"), Input.GetAxis("Mouse Y") * 1, .07f));
             brushAnimator.SetBool("isDrawing", Input.GetMouseButton(0));
         }
     }

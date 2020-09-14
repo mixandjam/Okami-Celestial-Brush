@@ -54,7 +54,7 @@ public class MovementInput : MonoBehaviour {
         }
         else
         {
-            verticalVel -= 1;
+            verticalVel -= .2f;
         }
         moveVector = new Vector3(0, verticalVel * .2f * Time.deltaTime, 0);
         controller.Move(moveVector);
